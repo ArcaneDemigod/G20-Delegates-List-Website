@@ -2,79 +2,151 @@
 <html>
 <head>
   <title>People & Flags</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial;
-      background: #f0f2f5;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #dfe9f3, #ffffff);
+      margin: 0;
+      padding: 20px;
       text-align: center;
     }
 
     h1 {
+      margin-bottom: 20px;
       color: #333;
     }
 
+    /* 🔍 Search Bar */
+    #search {
+      padding: 12px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+      outline: none;
+      margin-bottom: 25px;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /* 📱 Responsive Grid */
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    /* 🎨 Card Design */
     .card {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: white;
-      margin: 10px auto;
       padding: 15px;
-      width: 400px;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
     }
 
     .name {
-      font-size: 18px;
       font-weight: bold;
+      font-size: 16px;
+      text-align: left;
     }
 
+    /* 🏳️ Flag Animation */
     img {
-      width: 40px;
-      height: 25px;
-      border-radius: 3px;
+      width: 45px;
+      height: 28px;
+      border-radius: 5px;
+      transition: transform 0.4s ease;
+    }
+
+    img:hover {
+      transform: scale(1.3) rotate(5deg);
+    }
+
+    /* 📱 Mobile */
+    @media(max-width: 500px) {
+      .name {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<h1>People & Their Countries</h1>
+<h1>🌍 People & Their Countries</h1>
 
-<div class="card"><span class="name">Aakshaya (Palestine)</span><img src="https://flagcdn.com/w40/ps.png"></div>
-<div class="card"><span class="name">Aakshinee (USA)</span><img src="https://flagcdn.com/w40/us.png"></div>
-<div class="card"><span class="name">Aareyesh (Afghanistan)</span><img src="https://flagcdn.com/w40/af.png"></div>
-<div class="card"><span class="name">Aashi (South Korea)</span><img src="https://flagcdn.com/w40/kr.png"></div>
-<div class="card"><span class="name">Aaskshar (Germany)</span><img src="https://flagcdn.com/w40/de.png"></div>
-<div class="card"><span class="name">Adwaith (European Union)</span><img src="https://flagcdn.com/w40/eu.png"></div>
-<div class="card"><span class="name">Anshu (South Africa)</span><img src="https://flagcdn.com/w40/za.png"></div>
-<div class="card"><span class="name">Ashwath (India)</span><img src="https://flagcdn.com/w40/in.png"></div>
-<div class="card"><span class="name">Binita (Venezuela)</span><img src="https://flagcdn.com/w40/ve.png"></div>
-<div class="card"><span class="name">Chetan (Democratic Republic of Congo)</span><img src="https://flagcdn.com/w40/cd.png"></div>
-<div class="card"><span class="name">Daksh (Syria)</span><img src="https://flagcdn.com/w40/sy.png"></div>
-<div class="card"><span class="name">Daniel (France)</span><img src="https://flagcdn.com/w40/fr.png"></div>
-<div class="card"><span class="name">Deekshith (Argentina)</span><img src="https://flagcdn.com/w40/ar.png"></div>
-<div class="card"><span class="name">Dhruvi (Mexico)</span><img src="https://flagcdn.com/w40/mx.png"></div>
-<div class="card"><span class="name">Goutham (Lebanon)</span><img src="https://flagcdn.com/w40/lb.png"></div>
-<div class="card"><span class="name">Hamsa Nandini (North Korea)</span><img src="https://flagcdn.com/w40/kp.png"></div>
-<div class="card"><span class="name">Jai Chandra (Turkey)</span><img src="https://flagcdn.com/w40/tr.png"></div>
-<div class="card"><span class="name">Keshika (United Kingdom)</span><img src="https://flagcdn.com/w40/gb.png"></div>
-<div class="card"><span class="name">Kshethrith (Indonesia)</span><img src="https://flagcdn.com/w40/id.png"></div>
-<div class="card"><span class="name">Krishna Reddy (UAE)</span><img src="https://flagcdn.com/w40/ae.png"></div>
-<div class="card"><span class="name">Lakshaya (Russia)</span><img src="https://flagcdn.com/w40/ru.png"></div>
-<div class="card"><span class="name">Narthana (China)</span><img src="https://flagcdn.com/w40/cn.png"></div>
-<div class="card"><span class="name">Niharika (Brazil)</span><img src="https://flagcdn.com/w40/br.png"></div>
-<div class="card"><span class="name">Pathan (Denmark)</span><img src="https://flagcdn.com/w40/dk.png"></div>
-<div class="card"><span class="name">Rakshith (Japan)</span><img src="https://flagcdn.com/w40/jp.png"></div>
-<div class="card"><span class="name">Rithvik (Israel)</span><img src="https://flagcdn.com/w40/il.png"></div>
-<div class="card"><span class="name">Siri (Iran)</span><img src="https://flagcdn.com/w40/ir.png"></div>
-<div class="card"><span class="name">Soumil (Australia)</span><img src="https://flagcdn.com/w40/au.png"></div>
-<div class="card"><span class="name">Srivalli (Canada)</span><img src="https://flagcdn.com/w40/ca.png"></div>
-<div class="card"><span class="name">Vamshi (Bangladesh)</span><img src="https://flagcdn.com/w40/bd.png"></div>
-<div class="card"><span class="name">Varnith (Italy)</span><img src="https://flagcdn.com/w40/it.png"></div>
-<div class="card"><span class="name">Vishwan (Saudi Arabia)</span><img src="https://flagcdn.com/w40/sa.png"></div>
-<div class="card"><span class="name">Zenith (New Zealand)</span><img src="https://flagcdn.com/w40/nz.png"></div>
+<input type="text" id="search" placeholder="Search name or country...">
+
+<div class="container" id="container">
+
+  <!-- Cards -->
+  <div class="card"><span class="name">Aakshaya (Palestine)</span><img src="https://flagcdn.com/w40/ps.png"></div>
+  <div class="card"><span class="name">Aakshinee (USA)</span><img src="https://flagcdn.com/w40/us.png"></div>
+  <div class="card"><span class="name">Aareyesh (Afghanistan)</span><img src="https://flagcdn.com/w40/af.png"></div>
+  <div class="card"><span class="name">Aashi (South Korea)</span><img src="https://flagcdn.com/w40/kr.png"></div>
+  <div class="card"><span class="name">Aaskshar (Germany)</span><img src="https://flagcdn.com/w40/de.png"></div>
+  <div class="card"><span class="name">Adwaith (European Union)</span><img src="https://flagcdn.com/w40/eu.png"></div>
+  <div class="card"><span class="name">Anshu (South Africa)</span><img src="https://flagcdn.com/w40/za.png"></div>
+  <div class="card"><span class="name">Ashwath (India)</span><img src="https://flagcdn.com/w40/in.png"></div>
+  <div class="card"><span class="name">Binita (Venezuela)</span><img src="https://flagcdn.com/w40/ve.png"></div>
+  <div class="card"><span class="name">Chetan (DR Congo)</span><img src="https://flagcdn.com/w40/cd.png"></div>
+  <div class="card"><span class="name">Daksh (Syria)</span><img src="https://flagcdn.com/w40/sy.png"></div>
+  <div class="card"><span class="name">Daniel (France)</span><img src="https://flagcdn.com/w40/fr.png"></div>
+  <div class="card"><span class="name">Deekshith (Argentina)</span><img src="https://flagcdn.com/w40/ar.png"></div>
+  <div class="card"><span class="name">Dhruvi (Mexico)</span><img src="https://flagcdn.com/w40/mx.png"></div>
+  <div class="card"><span class="name">Goutham (Lebanon)</span><img src="https://flagcdn.com/w40/lb.png"></div>
+  <div class="card"><span class="name">Hamsa Nandini (North Korea)</span><img src="https://flagcdn.com/w40/kp.png"></div>
+  <div class="card"><span class="name">Jai Chandra (Turkey)</span><img src="https://flagcdn.com/w40/tr.png"></div>
+  <div class="card"><span class="name">Keshika (UK)</span><img src="https://flagcdn.com/w40/gb.png"></div>
+  <div class="card"><span class="name">Kshethrith (Indonesia)</span><img src="https://flagcdn.com/w40/id.png"></div>
+  <div class="card"><span class="name">Krishna Reddy (UAE)</span><img src="https://flagcdn.com/w40/ae.png"></div>
+  <div class="card"><span class="name">Lakshaya (Russia)</span><img src="https://flagcdn.com/w40/ru.png"></div>
+  <div class="card"><span class="name">Narthana (China)</span><img src="https://flagcdn.com/w40/cn.png"></div>
+  <div class="card"><span class="name">Niharika (Brazil)</span><img src="https://flagcdn.com/w40/br.png"></div>
+  <div class="card"><span class="name">Pathan (Denmark)</span><img src="https://flagcdn.com/w40/dk.png"></div>
+  <div class="card"><span class="name">Rakshith (Japan)</span><img src="https://flagcdn.com/w40/jp.png"></div>
+  <div class="card"><span class="name">Rithvik (Israel)</span><img src="https://flagcdn.com/w40/il.png"></div>
+  <div class="card"><span class="name">Siri (Iran)</span><img src="https://flagcdn.com/w40/ir.png"></div>
+  <div class="card"><span class="name">Soumil (Australia)</span><img src="https://flagcdn.com/w40/au.png"></div>
+  <div class="card"><span class="name">Srivalli (Canada)</span><img src="https://flagcdn.com/w40/ca.png"></div>
+  <div class="card"><span class="name">Vamshi (Bangladesh)</span><img src="https://flagcdn.com/w40/bd.png"></div>
+  <div class="card"><span class="name">Varnith (Italy)</span><img src="https://flagcdn.com/w40/it.png"></div>
+  <div class="card"><span class="name">Vishwan (Saudi Arabia)</span><img src="https://flagcdn.com/w40/sa.png"></div>
+  <div class="card"><span class="name">Zenith (New Zealand)</span><img src="https://flagcdn.com/w40/nz.png"></div>
+
+</div>
+
+<!-- 🔍 Search Script -->
+<script>
+  const search = document.getElementById("search");
+  const cards = document.querySelectorAll(".card");
+
+  search.addEventListener("input", function() {
+    const value = this.value.toLowerCase();
+
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(value) ? "flex" : "none";
+    });
+  });
+</script>
 
 </body>
 </html>
