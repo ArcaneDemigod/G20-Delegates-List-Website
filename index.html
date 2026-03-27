@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/globe.gl"></script>
 
   <style>
-    body { margin:0;font-family:Arial;background:#f5f5f5;transition:.4s; }
+    body { margin:0;font-family:Arial;background:#f5f5f5;transition:.3s; }
     .dark { background:#121212;color:white; }
 
     .header {
@@ -19,9 +19,7 @@
       color:white;padding:15px;font-size:22px;position:relative;
     }
 
-    .logo { width:35px; animation:spin 10s linear infinite; }
-    @keyframes spin { 100%{transform:rotate(360deg);} }
-
+    .logo { width:35px; }
     .dark-toggle {
       position:absolute;right:20px;background:white;
       padding:5px 10px;border-radius:20px;cursor:pointer;color:black;
@@ -46,19 +44,15 @@
 
     .card {
       padding:15px;border-radius:12px;background:white;
-      transition:.3s;animation:fadeUp .5s ease;
+      position:relative;
+      transition:.3s;
     }
 
     .dark .card { background:#1e1e1e; }
 
     .card:hover {
-      transform:translateY(-8px);
+      transform:translateY(-5px);
       box-shadow:0 0 20px rgba(255,153,51,0.5);
-    }
-
-    @keyframes fadeUp {
-      from {opacity:0;transform:translateY(20px);}
-      to {opacity:1;transform:translateY(0);}
     }
 
     .country {
@@ -66,8 +60,27 @@
       padding:4px 10px;border-radius:20px;margin-top:5px;
     }
 
-    .mini-map {
-      width:100%;height:120px;border-radius:10px;margin-top:10px;border:none;
+    .flag { width:40px;margin-top:5px; }
+
+    /* HOVER MAP */
+    .mini-map-popup {
+      position:absolute;
+      bottom:110%;
+      left:50%;
+      transform:translateX(-50%);
+      width:220px;height:150px;
+      background:white;
+      border-radius:10px;
+      overflow:hidden;
+      opacity:0;
+      transition:.3s;
+      pointer-events:none;
+    }
+
+    .card:hover .mini-map-popup { opacity:1; }
+
+    .mini-map-popup iframe {
+      width:100%;height:100%;border:none;
     }
 
     #mapContainer { display:none;height:520px; }
@@ -85,18 +98,11 @@
     }
 
     @keyframes pulse {
-      100% {transform:scale(3);opacity:0;}
+      100% { transform:scale(3);opacity:0; }
     }
 
     .popup-card { text-align:center; }
-    .popup-card img { width:60px;margin-top:5px; }
-
-    .leaflet-interactive {
-      stroke-dasharray:5;
-      animation:dash 4s linear infinite;
-    }
-
-    @keyframes dash { to{stroke-dashoffset:20;} }
+    .popup-card img { width:60px; }
 
   </style>
 </head>
@@ -112,22 +118,6 @@
 <div class="controls">
   <input id="search" placeholder="Search...">
 
-  <select id="filter">
-    <option value="all">All</option>
-    <option value="asia">Asia</option>
-    <option value="europe">Europe</option>
-    <option value="america">America</option>
-    <option value="africa">Africa</option>
-    <option value="oceania">Oceania</option>
-  </select>
-
-  <select id="sort">
-    <option value="">Sort</option>
-    <option value="az">Country A-Z</option>
-    <option value="za">Country Z-A</option>
-  </select>
-
-  <br>
   <button onclick="showCards()">📋 List</button>
   <button onclick="showMap()">🌍 Map</button>
   <button onclick="showGlobe()">🌐 Globe</button>
@@ -142,84 +132,96 @@
 
 <script>
 
-// 🔥 FULL DATA
 const data = [
-{n:"Aareyesh",c:"Afghanistan",code:"af",lat:33.9,lng:67.7,cont:"asia"},
-{n:"Deekshith",c:"Argentina",code:"ar",lat:-38.4,lng:-63.6,cont:"america"},
-{n:"Soumil",c:"Australia",code:"au",lat:-25.2,lng:133.7,cont:"oceania"},
-{n:"Vamshi",c:"Bangladesh",code:"bd",lat:23.6,lng:90.3,cont:"asia"},
-{n:"Niharika",c:"Brazil",code:"br",lat:-14.2,lng:-51.9,cont:"america"},
-{n:"Srivalli",c:"Canada",code:"ca",lat:56.1,lng:-106.3,cont:"america"},
-{n:"Narthana",c:"China",code:"cn",lat:35.8,lng:104.1,cont:"asia"},
-{n:"Chetan",c:"Democratic Republic of the Congo",code:"cd",lat:-4,lng:21,cont:"africa"},
-{n:"Pathan",c:"Denmark",code:"dk",lat:56.2,lng:9.5,cont:"europe"},
-{n:"Adwaith",c:"European Union",code:"eu",lat:50.8,lng:4.3,cont:"europe"},
-{n:"Daniel",c:"France",code:"fr",lat:46.2,lng:2.2,cont:"europe"},
-{n:"Aaskshar",c:"Germany",code:"de",lat:51.1,lng:10.4,cont:"europe"},
-{n:"Ashwath",c:"India",code:"in",lat:20.5,lng:78.9,cont:"asia"},
-{n:"Kshethrith",c:"Indonesia",code:"id",lat:-0.7,lng:113.9,cont:"asia"},
-{n:"Siri",c:"Iran",code:"ir",lat:32.4,lng:53.6,cont:"asia"},
-{n:"Rithvik",c:"Israel",code:"il",lat:31,lng:34.8,cont:"asia"},
-{n:"Varnith",c:"Italy",code:"it",lat:41.8,lng:12.5,cont:"europe"},
-{n:"Rakshith",c:"Japan",code:"jp",lat:36.2,lng:138.2,cont:"asia"},
-{n:"Dhruvi",c:"Mexico",code:"mx",lat:23.6,lng:-102.5,cont:"america"},
-{n:"Zenith",c:"New Zealand",code:"nz",lat:-40.9,lng:174.8,cont:"oceania"},
-{n:"Hamsa Nandini",c:"North Korea",code:"kp",lat:40.3,lng:127.5,cont:"asia"},
-{n:"Aakshaya",c:"Palestine",code:"ps",lat:31.9,lng:35.2,cont:"asia"},
-{n:"Vishwan",c:"Saudi Arabia",code:"sa",lat:23.8,lng:45,cont:"asia"},
-{n:"Aashi",c:"South Korea",code:"kr",lat:35.9,lng:127.7,cont:"asia"},
-{n:"Anshu",c:"South Africa",code:"za",lat:-30.5,lng:22.9,cont:"africa"},
-{n:"Daksh",c:"Syria",code:"sy",lat:34.8,lng:38.9,cont:"asia"},
-{n:"Jai Chandra",c:"Turkey",code:"tr",lat:38.9,lng:35.2,cont:"europe"},
-{n:"Krishna Reddy",c:"United Arab Emirates",code:"ae",lat:23.4,lng:53.8,cont:"asia"},
-{n:"Keshika",c:"United Kingdom",code:"gb",lat:55.3,lng:-3.4,cont:"europe"},
-{n:"Lakshaya",c:"Russian Federation",code:"ru",lat:61.5,lng:105.3,cont:"europe"},
-{n:"Aakshinee",c:"United States of America",code:"us",lat:37,lng:-95.7,cont:"america"},
-{n:"Binita",c:"Venezuela",code:"ve",lat:6.4,lng:-66.5,cont:"america"}
+{n:"Aareyesh",c:"Afghanistan",code:"af",lat:33.9,lng:67.7},
+{n:"Deekshith",c:"Argentina",code:"ar",lat:-38.4,lng:-63.6},
+{n:"Soumil",c:"Australia",code:"au",lat:-25.2,lng:133.7},
+{n:"Vamshi",c:"Bangladesh",code:"bd",lat:23.6,lng:90.3},
+{n:"Niharika",c:"Brazil",code:"br",lat:-14.2,lng:-51.9},
+{n:"Srivalli",c:"Canada",code:"ca",lat:56.1,lng:-106.3},
+{n:"Narthana",c:"China",code:"cn",lat:35.8,lng:104.1},
+{n:"Chetan",c:"Democratic Republic of the Congo",code:"cd",lat:-4,lng:21},
+{n:"Pathan",c:"Denmark",code:"dk",lat:56.2,lng:9.5},
+{n:"Daniel",c:"France",code:"fr",lat:46.2,lng:2.2},
+{n:"Aaskshar",c:"Germany",code:"de",lat:51.1,lng:10.4},
+{n:"Ashwath",c:"India",code:"in",lat:20.5,lng:78.9},
+{n:"Rithvik",c:"Israel",code:"il",lat:31,lng:34.8},
+{n:"Varnith",c:"Italy",code:"it",lat:41.8,lng:12.5},
+{n:"Rakshith",c:"Japan",code:"jp",lat:36.2,lng:138.2},
+{n:"Dhruvi",c:"Mexico",code:"mx",lat:23.6,lng:-102.5},
+{n:"Zenith",c:"New Zealand",code:"nz",lat:-40.9,lng:174.8},
+{n:"Aashi",c:"South Korea",code:"kr",lat:35.9,lng:127.7},
+{n:"Anshu",c:"South Africa",code:"za",lat:-30.5,lng:22.9},
+{n:"Jai Chandra",c:"Turkey",code:"tr",lat:38.9,lng:35.2},
+{n:"Keshika",c:"United Kingdom",code:"gb",lat:55.3,lng:-3.4},
+{n:"Aakshinee",c:"United States of America",code:"us",lat:37,lng:-95.7}
 ];
 
-// RENDER CARDS
-function render(list){
+// RENDER
+function render(){
   container.innerHTML="";
-  list.forEach(i=>{
+  data.forEach(i=>{
     container.innerHTML+=`
     <div class="card">
       <b>${i.n}</b>
       <div class="country">${i.c}</div>
-      <iframe class="mini-map"
-      src="https://www.google.com/maps?q=${i.c}&output=embed"></iframe>
+      <img class="flag" src="https://flagcdn.com/w40/${i.code}.png">
+
+      <div class="mini-map-popup">
+        <iframe src="https://www.google.com/maps?q=${i.c}&output=embed"></iframe>
+      </div>
     </div>`;
   });
 }
-
-render(data);
-
-// SEARCH FILTER SORT
-function update(){
-  let list=[...data];
-
-  if(search.value){
-    list=list.filter(i=>i.n.toLowerCase().includes(search.value)||i.c.toLowerCase().includes(search.value));
-  }
-
-  if(filter.value!=="all"){
-    list=list.filter(i=>i.cont===filter.value);
-  }
-
-  if(sort.value==="az") list.sort((a,b)=>a.c.localeCompare(b.c));
-  if(sort.value==="za") list.sort((a,b)=>b.c.localeCompare(a.c));
-
-  render(list);
-}
-
-search.oninput=update;
-filter.onchange=update;
-sort.onchange=update;
+render();
 
 // DARK
 function toggleDark(){ document.body.classList.toggle("dark"); }
 
-// MAP + GLOBE SAME AS BEFORE (WORKING)
+// SWITCH
+function showCards(){
+  container.style.display="grid";
+  mapContainer.style.display="none";
+}
+
+let map, globeInstance;
+
+function showMap(){
+  container.style.display="none";
+  mapContainer.style.display="block";
+
+  document.getElementById("map").style.display="block";
+  document.getElementById("globe").style.display="none";
+
+  if(map) map.remove();
+
+  map=L.map('map').setView([20,0],2);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  data.forEach(i=>{
+    const icon=L.divIcon({className:'pulse'});
+    L.marker([i.lat,i.lng],{icon})
+      .addTo(map)
+      .bindPopup(`<b>${i.c}</b><br>${i.n}`);
+  });
+}
+
+function showGlobe(){
+  container.style.display="none";
+  mapContainer.style.display="block";
+
+  document.getElementById("map").style.display="none";
+  document.getElementById("globe").style.display="block";
+
+  document.getElementById("globe").innerHTML="";
+
+  globeInstance = Globe()(document.getElementById('globe'))
+    .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+    .pointsData(data)
+    .pointLat(d=>d.lat)
+    .pointLng(d=>d.lng);
+}
 
 </script>
 
